@@ -205,7 +205,7 @@ router.put(
 
       await profile.save();
 
-      res.json({ profile });
+      res.json(profile);
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Server error');
@@ -218,20 +218,16 @@ router.put(
 // @access Private
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const foundProfile = await Profile.findOne({ user: req.user.id });
+    foundProfile.experience = foundProfile.experience.filter(
+      (exp) => exp._id.toString() !== req.params.exp_id
+    );
 
-    // Get remove index
-    const removeIndex = profile.experience
-      .map((item) => item.id)
-      .indexOf(req.params.exp_id);
-
-    profile.experience.splice(removeIndex, 1);
-
-    await profile.save();
-    res.json({ profile });
+    await foundProfile.save();
+    return res.status(200).json(foundProfile);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server error');
+    console.error(error);
+    return res.status(500).json({ msg: 'Server error' });
   }
 });
 
@@ -276,7 +272,7 @@ router.put(
 
       await profile.save();
 
-      res.json({ profile });
+      res.json(profile);
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Server error');
@@ -299,7 +295,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
     profile.education.splice(removeIndex, 1);
 
     await profile.save();
-    res.json({ profile });
+    res.json(profile);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server error');
