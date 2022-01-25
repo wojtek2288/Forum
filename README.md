@@ -1,7 +1,7 @@
 # Forum
 Forum web application allowing users to log in, create and comment on posts and manage their profile (written during MERN stack online course)
 
- ##Tech
+ ## Tech
 
 - React.js
 - Redux
